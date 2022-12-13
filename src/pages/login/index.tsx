@@ -11,7 +11,6 @@ const Login: FC = () => {
   const [form] = Form.useForm<LoginRequest>()
 
   const onFinish = (values: LoginRequest): void => {
-    console.log(values)
     login(values)
       .then((res) => {
         try {

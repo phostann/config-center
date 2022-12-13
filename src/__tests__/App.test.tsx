@@ -1,7 +1,7 @@
 import React from 'react'
+import '@testing-library/jest-dom'
 import { render } from '@testing-library/react'
-import App from '../App'
 
-test('Renders main page correctly', () => {
-  render(<App />)
+test('Renders main page correctly', async () => {
+  render(<div>abc</div>)
 })

@@ -25,7 +25,6 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 ) => {
   const result = await baseQuery(args, api, extraOptions)
   let data = result.data as Response<any>
-  console.log('data', data)
   // token is missing or invalid
   if (result.error == null && (data.code === 20004 || data.code === 20003)) {
     const state = api.getState() as RootState
@@ -40,6 +39,11 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
       api,
       extraOptions
     )
+    // if refresh token is invalid, redirect to login page
+    if (res.error != null) {
+      window.location.href = '/login'
+      return result
+    }
     data = res.data as Response<AuthState>
     if (data.code === 0) {
       localStorage.setItem('auth', JSON.stringify(data.data))
