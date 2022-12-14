@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Dropdown } from 'antd'
 import type { MenuProps } from 'antd'
 import { LogoutOutlined } from '@ant-design/icons'
-import { logout } from '@/pages/login/authSlice'
+import { logout } from '@/components/auth/authSlice'
 
 const Header: FC = () => {
   const navigate = useNavigate()

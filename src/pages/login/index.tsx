@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Button, Form, Input } from 'antd'
 import { LoginRequest, useLoginMutation } from '../../app/services/auth'
 import { useDispatch } from 'react-redux'
-import { setToken } from './authSlice'
+import { setToken } from '../../components/auth/authSlice'
 import { useNavigate } from 'react-router-dom'
 
 const Login: FC = () => {

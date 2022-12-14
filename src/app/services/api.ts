@@ -1,5 +1,5 @@
 import { RootState } from '@/app/store'
-import { AuthState, setToken } from '@/pages/login/authSlice'
+import { AuthState, setToken } from '@/components/auth/authSlice'
 import type { BaseQueryFn, FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import type { Response } from '@/types/response'

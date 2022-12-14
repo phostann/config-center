@@ -1,5 +1,5 @@
 import React, { FC, ReactElement } from 'react'
-import { selectToken } from '@/pages/login/authSlice'
+import { selectToken } from '@/components/auth/authSlice'
 import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 
