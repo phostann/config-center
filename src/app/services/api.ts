@@ -41,7 +41,9 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
     )
     // if refresh token is invalid, redirect to login page
     if (res.error != null) {
-      window.location.href = '/login'
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
       return result
     }
     data = res.data as Response<AuthState>

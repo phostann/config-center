@@ -3,10 +3,12 @@ import { Button, Form, Input } from 'antd'
 import { LoginRequest, useLoginMutation } from '../../app/services/auth'
 import { useDispatch } from 'react-redux'
 import { setToken } from './authSlice'
+import { useNavigate } from 'react-router-dom'
 
 const Login: FC = () => {
   const dispatch = useDispatch()
   const [login] = useLoginMutation()
+  const navigate = useNavigate()
 
   const [form] = Form.useForm<LoginRequest>()
 
@@ -19,6 +21,9 @@ const Login: FC = () => {
 
           // @ts-expect-error
           dispatch(setToken(res.data.data))
+
+          // navigate back
+          navigate('/')
         } catch (error) {}
       })
       .catch((err) => {
