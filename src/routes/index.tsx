@@ -1,5 +1,5 @@
 import React, { FC, lazy, LazyExoticComponent, ReactNode } from 'react'
-import { HomeOutlined } from '@ant-design/icons'
+import { FileTextOutlined, HomeOutlined } from '@ant-design/icons'
 
 export interface IRoute {
   path: string
@@ -28,14 +28,10 @@ export const routes: IRoute[] = [
         element: lazy(async () => await import('@/pages/home'))
       },
       {
-        path: '/about',
-        name: '关于',
-        element: lazy(async () => await import('@/pages/home'))
-      },
-      {
-        path: '/other',
-        name: '其他',
-        element: lazy(async () => await import('@/pages/home'))
+        path: '/config',
+        icon: <FileTextOutlined />,
+        name: '配置管理',
+        element: lazy(async () => await import('@/pages/config'))
       }
     ]
   },

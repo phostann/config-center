@@ -1,12 +1,7 @@
 import React, { FC } from 'react'
-import { Button } from 'antd'
 
 const Home: FC = () => {
-  return (
-    <>
-      <Button type="primary">中文</Button>
-    </>
-  )
+  return <>首页</>
 }
 
 export default Home
