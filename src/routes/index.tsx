@@ -31,7 +31,14 @@ export const routes: IRoute[] = [
         path: '/config',
         icon: <FileTextOutlined />,
         name: '配置管理',
-        element: lazy(async () => await import('@/pages/config'))
+        element: lazy(async () => await import('@/pages/config')),
+        children: [
+          {
+            path: '/config/:id',
+            hideInMenu: true,
+            element: lazy(async () => await import('@/pages/config/detail'))
+          }
+        ]
       }
     ]
   },

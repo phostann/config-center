@@ -13,7 +13,8 @@ const App: FC = () => {
 export default App
 
 const createRouteObjects = (routes: IRoute[]): RouteObject[] => {
-  return routes.map((route) => {
+  const _routes: RouteObject[] = []
+  routes.forEach((route) => {
     const item: RouteObject = {
       element:
         route.element != null ? (
@@ -39,9 +40,25 @@ const createRouteObjects = (routes: IRoute[]): RouteObject[] => {
         element: <Navigate to={route.redirect}></Navigate>
       })
     }
+    // hoist the child route
     if (route.children != null && route.children.length > 0) {
-      item.children?.push(...createRouteObjects(route.children))
+      const [nested, children] = route.children?.reduce<[IRoute[], IRoute[]]>(
+        (acc, cur) => {
+          if (cur.path?.match(':.+$') != null) {
+            acc[0].push(cur)
+          } else {
+            acc[1].push(cur)
+          }
+          return acc
+        },
+        [[], []]
+      ) ?? [[], []]
+
+      _routes.push(...createRouteObjects(nested))
+
+      item.children?.push(...createRouteObjects(children))
     }
-    return item
+    _routes.push(item)
   })
+  return _routes
 }

@@ -22,7 +22,16 @@ const BaseLayout: FC = () => {
   const onOpenKeyChange = (keys: string[]): void => setOpenKeys(keys)
 
   useEffect(() => {
-    const keys = menuTree.get(location.pathname)
+    let pathname = location.pathname
+
+    let keys
+    while (pathname.length !== 0) {
+      keys = menuTree.get(pathname)
+      if (keys != null) {
+        break
+      }
+      pathname = pathname.substring(0, pathname.lastIndexOf('/'))
+    }
 
     if (keys != null) {
       setSelectedKeys(keys)
@@ -54,7 +63,7 @@ const BaseLayout: FC = () => {
           </div>
           <div className="flex-1 bg-main-gray">
             <div className="m-6">
-              <div className="bg-white">
+              <div>
                 <Outlet></Outlet>
               </div>
               {/* <footer>页脚</footer> */}
@@ -70,20 +79,25 @@ export default BaseLayout
 
 const renderSideMenus = (routes: IRoute[]): ItemType[] => {
   const items: ItemType[] = []
-  routes.forEach((route) => {
-    if (!(route.hideInMenu != null && route.hideInMenu)) {
-      const item: ItemType = {
-        label: route.name,
-        key: route.path,
-        icon: route.icon
+  routes
+    .filter((route) => route.hideInMenu == null || !route.hideInMenu)
+    .forEach((route) => {
+      if (!(route.hideInMenu != null && route.hideInMenu)) {
+        const item: ItemType = {
+          label: route.name,
+          key: route.path,
+          icon: route.icon
+        }
+        items.push(item)
+        if (route.children != null && route.children.length > 0) {
+          const children = renderSideMenus(route.children)
+          if (children.length > 0) {
+            // @ts-expect-error
+            item.children = children
+          }
+        }
       }
-      items.push(item)
-      if (route.children != null && route.children.length > 0) {
-        // @ts-expect-error
-        item.children = renderSideMenus(route.children)
-      }
-    }
-  })
+    })
   return items
 }
 

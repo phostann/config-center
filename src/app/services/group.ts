@@ -1,4 +1,5 @@
 import { baseApi } from './api'
+import type { Response, PageData } from './../../types/response'
 
 export interface Group {
   id: number
@@ -8,7 +9,7 @@ export interface Group {
 export const groupApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    groups: builder.query<Group, void>({
+    groups: builder.query<Response<PageData<Group>>, void>({
       query: () => '/group'
     })
   })
