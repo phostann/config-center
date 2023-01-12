@@ -1,13 +1,25 @@
 import React, { FC } from 'react'
-import { createBrowserRouter, Navigate, RouteObject, RouterProvider } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouteObject,
+  RouterProvider
+} from 'react-router-dom'
+import zhCN from 'antd/locale/zh_CN'
 
 import LazyLoad from './components/lazyComponent'
 import { IRoute, routes } from './routes'
 
+import { ConfigProvider } from 'antd'
 import './App.css'
 
 const App: FC = () => {
-  return <RouterProvider router={createBrowserRouter(createRouteObjects(routes))}></RouterProvider>
+  return (
+    <ConfigProvider locale={zhCN}>
+      <RouterProvider router={createBrowserRouter(createRouteObjects(routes))}></RouterProvider>
+    </ConfigProvider>
+  )
 }
 
 export default App
@@ -21,7 +33,11 @@ const createRouteObjects = (routes: IRoute[]): RouteObject[] => {
           <LazyLoad>
             <route.element></route.element>
           </LazyLoad>
-        ) : null,
+        ) : (
+          <>
+            <Outlet></Outlet>
+          </>
+        ),
       children: []
     }
     if (route.redirect == null) {

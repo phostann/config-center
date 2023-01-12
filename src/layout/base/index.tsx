@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { IRoute, routes } from '@/routes'
-import { Menu } from 'antd'
+import { Menu, MenuProps } from 'antd'
 import { ItemType } from 'antd/es/menu/hooks/useItems'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Header from '@/components/header/header'
@@ -14,8 +14,11 @@ const BaseLayout: FC = () => {
   const [menuTree, setMenuTree] = useState<Map<string, string[]>>(new Map())
   const [openKeys, setOpenKeys] = useState<string[]>([])
 
-  const onSelectedItems = ({ key, selectedKeys }: any): void => {
+  const onClickMenuItem: MenuProps['onClick'] = ({ key }): void => {
     navigate(key)
+  }
+
+  const onSelectMenuItem: MenuProps['onSelect'] = ({ key, selectedKeys }): void => {
     setSelectedKeys(selectedKeys)
   }
 
@@ -57,15 +60,14 @@ const BaseLayout: FC = () => {
               mode="inline"
               selectedKeys={selectedKeys}
               openKeys={openKeys}
-              onSelect={onSelectedItems}
+              onClick={onClickMenuItem}
+              onSelect={onSelectMenuItem}
               onOpenChange={onOpenKeyChange}
             ></Menu>
           </div>
-          <div className="flex-1 bg-main-gray">
+          <div className="flex-1 bg-main-gray overflow-x-hidden overflow-y-auto">
             <div className="m-6">
-              <div>
-                <Outlet></Outlet>
-              </div>
+              <Outlet></Outlet>
               {/* <footer>页脚</footer> */}
             </div>
           </div>
@@ -82,7 +84,9 @@ const renderSideMenus = (routes: IRoute[]): ItemType[] => {
   routes
     .filter((route) => route.hideInMenu == null || !route.hideInMenu)
     .forEach((route) => {
-      if (!(route.hideInMenu != null && route.hideInMenu)) {
+      if (route.path === '/' && route.children != null && route.children.length > 0) {
+        items.push(...renderSideMenus(route.children))
+      } else if (!(route.hideInMenu != null && route.hideInMenu)) {
         const item: ItemType = {
           label: route.name,
           key: route.path,
@@ -103,9 +107,9 @@ const renderSideMenus = (routes: IRoute[]): ItemType[] => {
 
 const genMenuTree = (routes: IRoute[]): Map<string, string[]> => {
   const traversed = traverse(routes)
-  const flated = flatRoutes(traversed)
+  const flat = flatRoutes(traversed)
   const treeMap = new Map<string, string[]>()
-  flated.forEach((route) => {
+  flat.forEach((route) => {
     // exclude hidden routes
     if (route.hideInMenu != null && route.hideInMenu) return
     const keys = [route.path]

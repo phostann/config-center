@@ -8,7 +8,11 @@ import { logout } from '@/components/auth/authSlice'
 
 const Header: FC = () => {
   const navigate = useNavigate()
-  const { data } = useGetProfileQuery()
+  const { data, isError } = useGetProfileQuery()
+
+  if (isError) {
+    navigate('/login')
+  }
 
   const onClick: MenuProps['onClick'] = ({ key }) => {
     if (key === '1') {
@@ -27,14 +31,14 @@ const Header: FC = () => {
           src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
           className="block w-7 h-7"
         ></img>
-        <span className="ml-3">Ant Design Pro</span>
+        <span className="ml-3">运维中心</span>
       </Link>
       <Dropdown
         menu={{ items: [{ key: '1', label: '退出登录', icon: <LogoutOutlined />, onClick }] }}
         trigger={['click']}
       >
         <div className="h-full flex items-center px-3 ml-auto cursor-pointer">
-          {data?.data?.email ?? ''}
+          {data?.data?.nickname ?? ''}
         </div>
       </Dropdown>
     </header>

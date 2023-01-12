@@ -8,13 +8,14 @@ export interface LoginRequest {
 export interface LoginResponse {
   access_token: string
   refresh_token: string
+  token_type: string
 }
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
-        url: '/auth/login',
+        url: '/login',
         method: 'POST',
         body
       })

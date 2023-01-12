@@ -4,11 +4,13 @@ import type { RootState } from '@/app/store'
 export interface AuthState {
   access_token: string | null
   refresh_token: string | null
+  token_type: string | null
 }
 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 const initialState = {
   access_token: null,
-  refresh_token: null
+  refresh_token: null,
+  token_type: null
 } as AuthState
 
 export const authSlice = createSlice({
@@ -24,10 +26,12 @@ export const authSlice = createSlice({
     logout(state: AuthState) {
       state.access_token = null
       state.refresh_token = null
+      state.token_type = null
     },
     setToken(state: AuthState, action: PayloadAction<AuthState>) {
       state.access_token = action.payload.access_token
       state.refresh_token = action.payload.refresh_token
+      state.token_type = action.payload.token_type
     }
   }
 })

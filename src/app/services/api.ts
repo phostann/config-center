@@ -1,19 +1,19 @@
 import { RootState } from '@/app/store'
-import { AuthState, setToken, logout } from '@/components/auth/authSlice'
+import { AuthState, logout, setToken } from '@/components/auth/authSlice'
+import type { Response } from '@/types/response'
 import type { BaseQueryFn, FetchBaseQueryError } from '@reduxjs/toolkit/dist/query'
 import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { Response } from '@/types/response'
 import { Mutex } from 'async-mutex'
 
-const BASE_URL = 'http://localhost:3000/api/v1'
+const BASE_URL = 'http://localhost:9999'
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
   fetchBaseQuery({
     baseUrl: BASE_URL,
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).auth.access_token
-      if (token != null && !headers.has('Authorization')) {
-        headers.set('authorization', `Bearer ${token}`)
+      const auth = (getState() as RootState).auth
+      if (auth.access_token != null && auth.token_type != null && !headers.has('Authorization')) {
+        headers.set('Authorization', `${auth.token_type} ${auth.access_token}`)
       }
       return headers
     }
@@ -28,18 +28,19 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   await mutex.waitForUnlock()
   const result = await baseQuery(args, api, extraOptions)
   let data = result.data as Response<any>
+
   // token is missing or invalid
-  if (result.error == null && (data.code === 20004 || data.code === 20003)) {
+  if (result.error != null && result.error.status === 401) {
     if (!mutex.isLocked()) {
       const realease = await mutex.acquire()
-      const state = api.getState() as RootState
+      const auth = (api.getState() as RootState).auth
       try {
         const res = await baseQuery(
           {
-            url: '/auth/refresh',
+            url: '/refresh',
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${state.auth.refresh_token ?? ''}`
+              Authorization: `${auth.token_type ?? ''} ${auth.refresh_token ?? ''}`
             }
           },
           api,
@@ -74,6 +75,6 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: baseQueryWithReAuth,
-  tagTypes: [],
+  tagTypes: ['Groups', 'Configs', 'Users', 'Templates'],
   endpoints: () => ({})
 })
