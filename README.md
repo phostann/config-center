@@ -7,6 +7,6 @@
 ```shell
 git clone https://github.com/phostann/config-center.git
 
-pnpx husky-init && pnpx install
+pnpx husky-init && pnpm install
 ```
 
