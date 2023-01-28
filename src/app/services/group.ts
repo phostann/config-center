@@ -19,7 +19,11 @@ export interface UpdateGroupReq {
   name?: string
 }
 
-export const groupApi = baseApi.injectEndpoints({
+const enhanced = baseApi.enhanceEndpoints({
+  addTagTypes: ['Groups']
+})
+
+export const groupApi = enhanced.injectEndpoints({
   endpoints: (builder) => ({
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     groups: builder.query<PageResponse<Group>, QueryGroupReq>({

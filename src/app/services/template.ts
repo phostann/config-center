@@ -31,7 +31,11 @@ export interface UpdateTemplateReq {
   tags?: string[]
 }
 
-const templateApi = baseApi.injectEndpoints({
+const enhanced = baseApi.enhanceEndpoints({
+  addTagTypes: ['Templates']
+})
+
+const templateApi = enhanced.injectEndpoints({
   endpoints: (builder) => ({
     templates: builder.query<PageResponse<Template>, QueryTemplateReq>({
       query: (params) => ({
@@ -45,11 +49,6 @@ const templateApi = baseApi.injectEndpoints({
               { type: 'Templates', id: 'LIST' }
             ]
           : [{ type: 'Templates', id: 'LIST' }]
-    }),
-    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    templateTags: builder.query<Response<string[]>, void>({
-      query: () => '/template/tags',
-      providesTags: ['Templates']
     }),
     createTemplate: builder.mutation<Response<Template>, CreateTemplateReq>({
       query: (body) => ({
@@ -79,7 +78,6 @@ const templateApi = baseApi.injectEndpoints({
 
 export const {
   useTemplatesQuery,
-  useTemplateTagsQuery,
   useCreateTemplateMutation,
   useUpdateTemplateMutation,
   useDeleteTemplateMutation

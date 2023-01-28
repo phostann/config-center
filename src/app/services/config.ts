@@ -42,7 +42,11 @@ export interface CreateConfigReq {
   group_id: number
 }
 
-export const configApi = baseApi.injectEndpoints({
+const api = baseApi.enhanceEndpoints({
+  addTagTypes: ['Configs']
+})
+
+export const configApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     configs: builder.query<PageResponse<Config>, QueryConfigReq>({
