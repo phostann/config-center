@@ -1,14 +1,17 @@
-import { ConfigValueType } from '@/app/services/config'
+import { ConfigValue, ConfigValueType } from '@/app/services/config'
 import { useUploadMutation } from '@/app/services/file'
+import { Response } from '@/types/response'
 import { Media } from '@/utils/media'
 import { PlusOutlined } from '@ant-design/icons'
-import { Checkbox, Input, InputNumber, Upload, UploadProps } from 'antd'
-import React, { FC, useEffect } from 'react'
+import { Checkbox, Input, InputNumber, Upload, UploadFile, UploadProps } from 'antd'
+import { AxiosResponse } from 'axios'
+import { nanoid } from 'nanoid'
+import React, { FC, useMemo } from 'react'
 
 interface ValueItemProps {
   value?: string | number | boolean
   valueType: ConfigValueType
-  onChange?: (value: string | number | boolean) => void
+  onChange?: (value: ConfigValue['value']) => void
 }
 
 const getFileName = (url: string): string => {
@@ -17,20 +20,15 @@ const getFileName = (url: string): string => {
 }
 
 const ValueItem: FC<ValueItemProps> = ({ value, valueType, onChange }) => {
-  const [upload, { data: uploadRes }] = useUploadMutation()
-
-  useEffect(() => {
-    if (uploadRes != null) {
-      onChange?.(uploadRes.data)
-    }
-  }, [uploadRes, onChange])
+  const [upload] = useUploadMutation()
 
   const beforeUpload: UploadProps['beforeUpload'] = (file) => {
     void (async () => {
       try {
         const formData = new FormData()
         formData.append('file', file)
-        await upload(formData)
+        const res = (await upload(formData)) as AxiosResponse<Response<string>>
+        onChange?.([...(value as any as string[]), res.data.data])
       } catch (error) {
         console.log(error)
       }
@@ -38,9 +36,19 @@ const ValueItem: FC<ValueItemProps> = ({ value, valueType, onChange }) => {
     return false
   }
 
-  const onUploadChange: UploadProps['onChange'] = ({ file }) => {
-    onChange?.(file.url as string)
-  }
+  const fileList = useMemo<UploadFile[]>(() => {
+    if (Array.isArray(value)) {
+      return value.map((item) => {
+        return {
+          uid: nanoid(),
+          url: item,
+          name: getFileName(item),
+          status: 'done'
+        }
+      })
+    }
+    return []
+  }, [value])
 
   const renderValueItem = (): React.ReactElement => {
     switch (valueType) {
@@ -65,21 +73,8 @@ const ValueItem: FC<ValueItemProps> = ({ value, valueType, onChange }) => {
           <Upload
             listType={'picture-card'}
             accept={Media.imgAccept}
-            fileList={
-              value != null && typeof value === 'string' && Media.checkIsImg(value)
-                ? [
-                    {
-                      uid: '-1',
-                      url: value,
-                      name: getFileName(value),
-                      status: 'done'
-                    }
-                  ]
-                : []
-            }
-            maxCount={1}
+            fileList={fileList}
             beforeUpload={beforeUpload}
-            onChange={onUploadChange}
           >
             <div>
               <PlusOutlined></PlusOutlined>
@@ -106,7 +101,6 @@ const ValueItem: FC<ValueItemProps> = ({ value, valueType, onChange }) => {
             }
             maxCount={1}
             beforeUpload={beforeUpload}
-            onChange={onUploadChange}
           >
             <div>
               <PlusOutlined></PlusOutlined>

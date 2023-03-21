@@ -5,7 +5,7 @@ import type { BaseQueryFn, FetchBaseQueryError } from '@reduxjs/toolkit/dist/que
 import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
-const BASE_URL = 'http://localhost:9999'
+const BASE_URL = 'http://192.168.31.120:8989'
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
   fetchBaseQuery({
@@ -32,7 +32,7 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   // token is missing or invalid
   if (result.error != null && result.error.status === 401) {
     if (!mutex.isLocked()) {
-      const realease = await mutex.acquire()
+      const release = await mutex.acquire()
       const auth = (api.getState() as RootState).auth
       try {
         const res = await baseQuery(
@@ -64,7 +64,7 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
       } catch (error) {
         console.error(error)
       } finally {
-        realease()
+        release()
       }
     }
   }

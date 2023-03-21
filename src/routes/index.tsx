@@ -59,6 +59,12 @@ export const routes: IRoute[] = [
         name: '模板管理',
         icon: <FileTextOutlined />,
         element: lazy(async () => await import('@/pages/template'))
+      },
+      {
+        path: '/project',
+        name: '项目管理',
+        icon: <FileTextOutlined></FileTextOutlined>,
+        element: lazy(async () => await import('@/pages/project'))
       }
     ]
   },

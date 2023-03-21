@@ -8,6 +8,8 @@ export interface Template {
   brief: string
   kind: string
   tags: string[]
+  created_at: string
+  updated_at: string
 }
 
 export interface QueryTemplateReq {

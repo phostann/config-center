@@ -77,6 +77,7 @@ const ConfigDetail: FC = () => {
       {
         title: '值',
         dataIndex: 'value',
+        width: '60%',
         render: (_, record) => {
           switch (record.type) {
             case ConfigValueType.STRING:
@@ -85,10 +86,19 @@ const ConfigDetail: FC = () => {
               return String(record.value)
             case ConfigValueType.IMAGE:
               return (
-                <div className="w-8 h-8 rounded-full overflow-hidden flex justify-center items-center">
-                  <img src={record.value as string} className="block max-w-full" />
+                <div className="flex flex-wrap">
+                  {Array.isArray(record.value)
+                    ? record.value.map((item, index) => (
+                        <div
+                          key={index}
+                          className="bg-cover w-8 h-8 mr-1"
+                          style={{ backgroundImage: `url("${item}")` }}
+                        ></div>
+                      ))
+                    : null}
                 </div>
               )
+
             case ConfigValueType.VIDEO:
               return <video className="w-8 h-8 rounded-full" src={record.value as string} />
             default:
@@ -106,7 +116,9 @@ const ConfigDetail: FC = () => {
                 编辑
               </Button>
               <Popconfirm title="确定要删除吗?" onConfirm={() => onDeleteConfirm(index)}>
-                <Button type="link">删除</Button>
+                <Button type="link" danger>
+                  删除
+                </Button>
               </Popconfirm>
             </Button.Group>
           )

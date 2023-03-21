@@ -112,7 +112,9 @@ const Templates: FC = () => {
               编辑
             </Button>
             <Popconfirm title="确定要删除吗?" onConfirm={() => onDelete(record)}>
-              <Button type="link">删除</Button>
+              <Button type="link" danger>
+                删除
+              </Button>
             </Popconfirm>
             <Button type={'link'} onClick={() => onUseTemplate(record)}>
               使用

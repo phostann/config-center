@@ -12,7 +12,7 @@ export enum ConfigValueType {
 
 export interface ConfigValue {
   type: ConfigValueType
-  value: string | number | boolean
+  value: string | number | boolean | string[]
   key: string
 }
 

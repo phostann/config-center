@@ -35,7 +35,7 @@ const Login: FC = () => {
     <div className="w-full h-full flex justify-center items-center">
       <div className="w-80">
         <Form<LoginRequest> form={form} labelCol={{ span: 8 }} onFinish={onFinish}>
-          <Form.Item label="邮箱" name={'email'} rules={[{ required: true, type: 'email' }]}>
+          <Form.Item label="邮箱" name={'username'} rules={[{ required: true, type: 'email' }]}>
             <Input placeholder="邮箱" type={'text'} />
           </Form.Item>
           <Form.Item label="密码" required name="password">
