@@ -4,10 +4,18 @@ import { baseApi } from './api'
 export interface Project {
   id: number
   name: string
-  repo: string
-  repo_id: number
+  ssh_url: string
+  http_url: string
+  web_url: string
+  pid: number
   user_id: number
-  user_name: string
+  username: string
+  badge: string
+  category: string
+  tags: string[]
+  build_cmd: string
+  dist: string
+  description: string
   created_at: string
   updated_at: string
 }
@@ -21,16 +29,34 @@ export interface QueryProjectReq {
 
 export interface AddProjectReq {
   name: string
-  repo: string
-  repo_id: number
+  ssh_url: string
+  http_url: string
+  web_url: string
+  pid: number
+  user_id: number
+  username: string
+  badge: string
+  category: string
+  tags: string[]
+  build_cmd: string
+  dist: string
   description: string
 }
 
 export interface UpdateProjectReq {
   id: number
   name: string
-  repo: string
-  repo_id: number
+  ssh_url: string
+  http_url: string
+  web_url: string
+  pid: number
+  user_id: number
+  username: string
+  badge: string
+  category: string
+  tags: string[]
+  build_cmd: string
+  dist: string
   description: string
 }
 
@@ -55,14 +81,14 @@ const projectApi = enhanced.injectEndpoints({
     }),
     deleteProject: builder.mutation<any, number>({
       query: (id) => ({
-        url: `/project/${id}`,
+        url: `/projects/${id}`,
         method: 'DELETE'
       }),
       invalidatesTags: ['Projects']
     }),
     addProject: builder.mutation<Project, AddProjectReq>({
       query: (project) => ({
-        url: '/project',
+        url: '/projects',
         method: 'POST',
         body: project
       }),
@@ -70,13 +96,10 @@ const projectApi = enhanced.injectEndpoints({
     }),
     updateProject: builder.mutation<Project, UpdateProjectReq>({
       query: (project) => ({
-        url: `/project/${project.id}`,
+        url: `/projects/${project.id}`,
         method: 'PATCH',
         body: {
-          name: project.name,
-          repo: project.repo,
-          repo_id: project.repo_id,
-          description: project.description
+          ...project
         }
       }),
       invalidatesTags: ['Projects']

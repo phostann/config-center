@@ -1,15 +1,14 @@
 import React, { FC, ReactElement } from 'react'
 import { selectToken } from '@/components/auth/authSlice'
 import { useSelector } from 'react-redux'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { redirect, useLocation } from 'react-router-dom'
 
 const Auth: FC<{ children?: ReactElement }> = ({ children }) => {
   const token = useSelector(selectToken)
   const location = useLocation()
-  const navigate = useNavigate()
 
   if (token == null && location.pathname !== '/login') {
-    navigate('/login')
+    redirect('/login')
   }
 
   return <>{children}</>

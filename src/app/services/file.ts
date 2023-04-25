@@ -6,7 +6,7 @@ export const fileApi = baseApi.injectEndpoints({
     upload: builder.mutation<Response<string>, FormData>({
       query: (data) => ({
         method: 'POST',
-        url: '/upload',
+        url: '/files/upload',
         body: data
       })
     })

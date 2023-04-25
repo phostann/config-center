@@ -5,7 +5,8 @@ import type { BaseQueryFn, FetchBaseQueryError } from '@reduxjs/toolkit/dist/que
 import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
-const BASE_URL = 'http://192.168.31.120:8989'
+const BASE_URL = 'http://192.168.31.120:8991/v1'
+// const BASE_URL = 'http://localhost:8991/v1'
 
 export const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> =
   fetchBaseQuery({
@@ -37,7 +38,7 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
       try {
         const res = await baseQuery(
           {
-            url: '/refresh',
+            url: '/users/refresh',
             method: 'POST',
             headers: {
               Authorization: `${auth.token_type ?? ''} ${auth.refresh_token ?? ''}`

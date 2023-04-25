@@ -9,7 +9,7 @@ import {
   useUpdateTemplateMutation
 } from '@/app/services/template'
 import { PlusOutlined, RedoOutlined, SearchOutlined } from '@ant-design/icons'
-import { Button, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Space } from 'antd'
+import { Button, Form, Input, InputNumber, Modal, Popconfirm, Space } from 'antd'
 import React, { FC, useState } from 'react'
 import { useForm } from 'antd/es/form/Form'
 import Table, { ColumnProps } from 'antd/es/table'
@@ -75,12 +75,6 @@ const Templates: FC = () => {
     })()
   }
 
-  const onUseTemplate = (record: Template): void => {
-    void (async () => {
-      await message.success('命令拷贝成功')
-    })()
-  }
-
   const columns: Array<ColumnProps<Template>> = [
     {
       title: '模板名称',
@@ -89,18 +83,6 @@ const Templates: FC = () => {
     {
       title: '简介',
       dataIndex: 'brief'
-    },
-    {
-      title: '分类',
-      dataIndex: 'kind',
-      render(_, record, index) {
-        switch (record.kind) {
-          case 'host':
-            return '主应用'
-          case 'component':
-            return '子应用'
-        }
-      }
     },
     {
       title: '操作',
@@ -116,9 +98,6 @@ const Templates: FC = () => {
                 删除
               </Button>
             </Popconfirm>
-            <Button type={'link'} onClick={() => onUseTemplate(record)}>
-              使用
-            </Button>
           </Space>
         )
       }
@@ -167,12 +146,6 @@ const Templates: FC = () => {
           </Form.Item>
           <Form.Item label="简介" name={'brief'} rules={[{ required: true }]}>
             <Input></Input>
-          </Form.Item>
-          <Form.Item label="分类" name={'kind'} rules={[{ required: true }]}>
-            <Select>
-              <Select.Option value="host">主应用</Select.Option>
-              <Select.Option value="component">子应用</Select.Option>
-            </Select>
           </Form.Item>
           <Form.Item label="仓库地址" name={'repo'} rules={[{ required: true }]}>
             <Input></Input>

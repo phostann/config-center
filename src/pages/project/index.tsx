@@ -15,7 +15,7 @@ import Table, { ColumnProps } from 'antd/es/table'
 import { useForm } from 'antd/es/form/Form'
 
 const Project: FC = () => {
-  const [form] = useForm<AddProjectReq & { id?: number }>()
+  const [form] = useForm<Omit<UpdateProjectReq, 'tags'> & { tags: string }>()
 
   const [params, setParams] = useState<QueryProjectReq>({ page: 1, page_size: 10 })
 
@@ -44,7 +44,7 @@ const Project: FC = () => {
       .then((values) => {
         if (values.id != null) {
           // 修改
-          update(values as UpdateProjectReq)
+          update({ ...values, tags: values.tags?.split(',') ?? [] })
             .then(() => {
               void message.success('修改成功')
               setOpen(false)
@@ -55,7 +55,8 @@ const Project: FC = () => {
             })
         } else {
           // 新增
-          add(values as AddProjectReq)
+          // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+          add({ ...values, tags: values.tags?.split(',') ?? [] } as AddProjectReq)
             .then(() => {
               void message.success('新增成功')
               setOpen(false)
@@ -72,7 +73,7 @@ const Project: FC = () => {
   }
 
   const onEdit = (record: ProjectType): void => {
-    form.setFieldsValue(record)
+    form.setFieldsValue({ ...record, tags: record.tags?.join(',') ?? '' })
     setOpen(true)
   }
 
@@ -101,6 +102,22 @@ const Project: FC = () => {
     {
       title: '项目描述',
       dataIndex: 'description'
+    },
+    {
+      title: '分类',
+      dataIndex: 'category'
+    },
+    {
+      title: '标签',
+      dataIndex: 'tags'
+    },
+    {
+      title: '构建命令',
+      dataIndex: 'build_cmd'
+    },
+    {
+      title: '打包目录',
+      dataIndex: 'dist'
     },
     {
       title: '创建人',
@@ -180,16 +197,34 @@ const Project: FC = () => {
           <Form.Item name={'id'} hidden>
             <InputNumber></InputNumber>
           </Form.Item>
-          <Form.Item name={'name'} label="项目名称" rules={[{ required: true }]}>
+          <Form.Item name={'pid'} label={'项目 ID'} rules={[{ required: true }]}>
+            <InputNumber className={'w-full'}></InputNumber>
+          </Form.Item>
+          <Form.Item name={'name'} label={'项目名称'} rules={[{ required: true }]}>
             <Input></Input>
           </Form.Item>
-          <Form.Item name={'repo'} label="仓库地址" rules={[{ required: true }]}>
+          <Form.Item name={'description'} label={'项目描述'} rules={[{ required: true }]}>
             <Input></Input>
           </Form.Item>
-          <Form.Item name={'repo_id'} label="仓库 id" rules={[{ required: true }]}>
-            <InputNumber></InputNumber>
+          <Form.Item name={'category'} label={'分类'} rules={[{ required: true }]}>
+            <Input></Input>
           </Form.Item>
-          <Form.Item name={'description'} label="项目描述" rules={[{ required: true }]}>
+          <Form.Item name={'tags'} label={'标签'} rules={[{ required: true }]}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={'web_url'} label={'项目主页'} rules={[{ required: true }]}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={'ssh_url'} label={'ssh 地址'} rules={[{ required: true }]}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={'http_url'} label={'http 地址'} rules={[{ required: true }]}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={'build_cmd'} label={'构建命令'} rules={[{ required: true }]}>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name={'dist'} label={'打包目录'} rules={[{ required: true }]}>
             <Input></Input>
           </Form.Item>
         </Form>

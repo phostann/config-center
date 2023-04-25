@@ -11,7 +11,7 @@ export const profileApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     getProfile: builder.query<Response<Profile>, void>({
-      query: () => '/profile'
+      query: () => '/users/profile'
     })
   })
 })

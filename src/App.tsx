@@ -7,17 +7,24 @@ import {
   RouterProvider
 } from 'react-router-dom'
 import zhCN from 'antd/locale/zh_CN'
-
 import LazyLoad from './components/lazyComponent'
 import { IRoute, routes } from './routes'
-
 import { ConfigProvider } from 'antd'
 import './App.css'
+
+const isProd = process.env.NODE_ENV === 'production'
+
+// const basename = isProd ? '/config-center/' : '/'
+const basename = isProd ? '/' : '/'
 
 const App: FC = () => {
   return (
     <ConfigProvider locale={zhCN}>
-      <RouterProvider router={createBrowserRouter(createRouteObjects(routes))}></RouterProvider>
+      <RouterProvider
+        router={createBrowserRouter(createRouteObjects(routes), {
+          basename
+        })}
+      ></RouterProvider>
     </ConfigProvider>
   )
 }

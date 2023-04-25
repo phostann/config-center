@@ -6,21 +6,17 @@ export interface Template {
   name: string
   repo: string
   brief: string
-  kind: string
-  tags: string[]
   created_at: string
   updated_at: string
 }
 
 export interface QueryTemplateReq {
   name?: string
-  tag?: string
 }
 
 export interface CreateTemplateReq {
   name: string
   brief: string
-  kind: string
   repo: string
 }
 
@@ -28,9 +24,7 @@ export interface UpdateTemplateReq {
   id: number
   name?: string
   brief?: string
-  kind?: string
   repo?: string
-  tags?: string[]
 }
 
 const enhanced = baseApi.enhanceEndpoints({
@@ -54,7 +48,7 @@ const templateApi = enhanced.injectEndpoints({
     }),
     createTemplate: builder.mutation<Response<Template>, CreateTemplateReq>({
       query: (body) => ({
-        url: '/template',
+        url: '/templates',
         method: 'POST',
         body
       }),
@@ -62,7 +56,7 @@ const templateApi = enhanced.injectEndpoints({
     }),
     updateTemplate: builder.mutation<Response<Template>, UpdateTemplateReq>({
       query: ({ id, ...payload }) => ({
-        url: `/template/${id}`,
+        url: `/templates/${id}`,
         method: 'PATCH',
         body: payload
       }),
@@ -70,7 +64,7 @@ const templateApi = enhanced.injectEndpoints({
     }),
     deleteTemplate: builder.mutation<Response<void>, number>({
       query: (id) => ({
-        url: `/template/${id}`,
+        url: `/templates/${id}`,
         method: 'DELETE'
       }),
       invalidatesTags: (result, error, id) => [{ type: 'Templates' as const, id }]

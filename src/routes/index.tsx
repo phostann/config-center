@@ -15,45 +15,45 @@ export interface IRoute {
 export const routes: IRoute[] = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/templates',
     icon: <HomeOutlined />,
     element: lazy(async () => await import('@/layout/base')),
     errElement: lazy(async () => await import('@/pages/error')),
     children: [
       {
         path: '/home',
-        name: '首页1',
+        name: '首页',
         hideInMenu: true,
         element: lazy(async () => await import('@/pages/home'))
       },
-      {
-        path: '/configs',
-        icon: <FileTextOutlined></FileTextOutlined>,
-        name: '配置管理',
-        redirect: '/configs/group',
-        children: [
-          {
-            path: '/configs/group',
-            icon: <FileTextOutlined></FileTextOutlined>,
-            name: '分组管理',
-            element: lazy(async () => await import('@/pages/group'))
-          },
-          {
-            path: '/configs/config',
-            icon: <FileTextOutlined />,
-            name: '配置管理',
-            element: lazy(async () => await import('@/pages/config')),
-            children: [
-              {
-                path: '/configs/config/:id',
-                hideInMenu: true,
-                name: '详情',
-                element: lazy(async () => await import('@/pages/config/detail'))
-              }
-            ]
-          }
-        ]
-      },
+      // {
+      //   path: '/configs',
+      //   icon: <FileTextOutlined></FileTextOutlined>,
+      //   name: '配置管理',
+      //   redirect: '/configs/group',
+      //   children: [
+      //     {
+      //       path: '/configs/group',
+      //       icon: <FileTextOutlined></FileTextOutlined>,
+      //       name: '分组管理',
+      //       element: lazy(async () => await import('@/pages/group'))
+      //     },
+      //     {
+      //       path: '/configs/config',
+      //       icon: <FileTextOutlined />,
+      //       name: '配置管理',
+      //       element: lazy(async () => await import('@/pages/config')),
+      //       children: [
+      //         {
+      //           path: '/configs/config/:id',
+      //           hideInMenu: true,
+      //           name: '详情',
+      //           element: lazy(async () => await import('@/pages/config/detail'))
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // },
       {
         path: '/templates',
         name: '模板管理',
@@ -66,6 +66,12 @@ export const routes: IRoute[] = [
         icon: <FileTextOutlined></FileTextOutlined>,
         element: lazy(async () => await import('@/pages/project'))
       }
+      // {
+      //   path: '/build',
+      //   name: '项目构建',
+      //   icon: <FileTextOutlined></FileTextOutlined>,
+      //   element: lazy(async () => await import('@/pages/build'))
+      // }
     ]
   },
   {
