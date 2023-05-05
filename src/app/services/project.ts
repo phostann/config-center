@@ -11,8 +11,6 @@ export interface Project {
   user_id: number
   username: string
   badge: string
-  category: string
-  tags: string[]
   build_cmd: string
   dist: string
   description: string
@@ -36,8 +34,6 @@ export interface AddProjectReq {
   user_id: number
   username: string
   badge: string
-  category: string
-  tags: string[]
   build_cmd: string
   dist: string
   description: string
@@ -53,8 +49,6 @@ export interface UpdateProjectReq {
   user_id: number
   username: string
   badge: string
-  category: string
-  tags: string[]
   build_cmd: string
   dist: string
   description: string

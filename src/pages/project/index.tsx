@@ -15,7 +15,7 @@ import Table, { ColumnProps } from 'antd/es/table'
 import { useForm } from 'antd/es/form/Form'
 
 const Project: FC = () => {
-  const [form] = useForm<Omit<UpdateProjectReq, 'tags'> & { tags: string }>()
+  const [form] = useForm<UpdateProjectReq>()
 
   const [params, setParams] = useState<QueryProjectReq>({ page: 1, page_size: 10 })
 
@@ -44,7 +44,7 @@ const Project: FC = () => {
       .then((values) => {
         if (values.id != null) {
           // 修改
-          update({ ...values, tags: values.tags?.split(',') ?? [] })
+          update({ ...values })
             .then(() => {
               void message.success('修改成功')
               setOpen(false)
@@ -56,7 +56,7 @@ const Project: FC = () => {
         } else {
           // 新增
           // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-          add({ ...values, tags: values.tags?.split(',') ?? [] } as AddProjectReq)
+          add({ ...values } as AddProjectReq)
             .then(() => {
               void message.success('新增成功')
               setOpen(false)
@@ -73,7 +73,7 @@ const Project: FC = () => {
   }
 
   const onEdit = (record: ProjectType): void => {
-    form.setFieldsValue({ ...record, tags: record.tags?.join(',') ?? '' })
+    form.setFieldsValue({ ...record })
     setOpen(true)
   }
 
@@ -102,14 +102,6 @@ const Project: FC = () => {
     {
       title: '项目描述',
       dataIndex: 'description'
-    },
-    {
-      title: '分类',
-      dataIndex: 'category'
-    },
-    {
-      title: '标签',
-      dataIndex: 'tags'
     },
     {
       title: '构建命令',
@@ -204,12 +196,6 @@ const Project: FC = () => {
             <Input></Input>
           </Form.Item>
           <Form.Item name={'description'} label={'项目描述'} rules={[{ required: true }]}>
-            <Input></Input>
-          </Form.Item>
-          <Form.Item name={'category'} label={'分类'} rules={[{ required: true }]}>
-            <Input></Input>
-          </Form.Item>
-          <Form.Item name={'tags'} label={'标签'} rules={[{ required: true }]}>
             <Input></Input>
           </Form.Item>
           <Form.Item name={'web_url'} label={'项目主页'} rules={[{ required: true }]}>
